@@ -38,11 +38,23 @@ function removeFromCart(cart, id) {
   return cart.filter((e) => e.id !== id);
 }
 
-function calculateCartSubtotal() {
-  return notImplemented();
+function calculateCartSubtotal(cart) {
+  if (cart.length === 0) return 0;
+  return cart.reduce(function (sum, e) {
+    return sum + e.price * e.quantity;
+  }, 0);
 }
-function calculateOrderTotal() {
-  return notImplemented();
+
+function calculateOrderTotal(cart, disc) {
+  let order = {};
+  order.subtotal = calculateCartSubtotal(cart);
+  order.discount = 0;
+  if (disc === "SAVE10" && order.subtotal > 20000) {
+    order.discount = order.subtotal * 0.1;
+  }
+  order.delivery = order.subtotal < 50000 ? 30000 : 0;
+  order.total = order.subtotal - order.discount + order.delivery;
+  return order;
 }
 
 const cartApi = {
