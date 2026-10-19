@@ -20,12 +20,24 @@ function addToCart(arr, item, qnt) {
   return arr;
 }
 
-function changeQuantity() {
-  return notImplemented();
+function changeQuantity(cart, id, qnt) {
+  if (qnt <= 0) throw new RangeError("Количество должно быть больше нуля");
+
+  const existing = cart.find((e) => e.id === id);
+  if (!existing) return cart;
+  if (qnt > existing.stock)
+    throw new RangeError("На складе недостаточно товара");
+
+  return cart.map((e) => (e.id === id ? { ...e, quantity: qnt } : e));
 }
-function removeFromCart() {
-  return notImplemented();
+
+function removeFromCart(cart, id) {
+  const existing = cart.find((e) => e.id === id);
+  if (!existing) return cart;
+
+  return cart.filter((e) => e.id !== id);
 }
+
 function calculateCartSubtotal() {
   return notImplemented();
 }
